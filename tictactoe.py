@@ -93,12 +93,8 @@ def get_player_move(player_mark: str, current_play: List[str]) -> List[str]:
         print("Choose where to mark. (1~9)")
         player_move = input()
 
-    new_play = []
-    for index, val in enumerate(current_play):
-        if index + 1 == int(player_move):
-            new_play.append(player_mark)
-        else:
-            new_play.append(val)
+    new_play = current_play.copy()
+    new_play[int(player_move) - 1] = player_mark
 
     return new_play
 
