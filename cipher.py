@@ -10,14 +10,13 @@ SHIFTED SYMBOL TABLE: |C|D|E|F|A|B|
 """
 
 import re
-from typing import List, Tuple
 
 SYMBOLS = list(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 !?@#$%^&*()"
 )
 
 
-def get_message_and_key() -> Tuple[str, int]:
+def get_message_and_key() -> tuple[str, int]:
     """requests user message and key, validates the key, and returns them"""
 
     print("Enter message:")
@@ -32,7 +31,7 @@ def get_message_and_key() -> Tuple[str, int]:
     return (user_message, user_key)
 
 
-def rotate_chars(chars_list: List[str], key) -> List[str]:
+def rotate_chars(chars_list: list[str], key) -> list[str]:
     """shifts symbol table to the left by number of times provided by key"""
 
     for _ in range(key):
@@ -41,7 +40,7 @@ def rotate_chars(chars_list: List[str], key) -> List[str]:
     return chars_list
 
 
-def encrypt_message(original_message: str, shifted_symbols: List[str]) -> str:
+def encrypt_message(original_message: str, shifted_symbols: list[str]) -> str:
     """encrypts message using symbols rotated by user key"""
 
     shifted_message = ""
@@ -51,7 +50,7 @@ def encrypt_message(original_message: str, shifted_symbols: List[str]) -> str:
     return shifted_message
 
 
-def decrypt_message(shifted_message: str, shifted_symbols: List[str]) -> str:
+def decrypt_message(shifted_message: str, shifted_symbols: list[str]) -> str:
     """receives encrypted message and reconstructs the original message from it"""
 
     original_message = ""

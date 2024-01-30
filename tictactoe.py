@@ -15,23 +15,22 @@ X|O|X
 import re
 import random
 import time
-from typing import List, Tuple
 
 
-def draw_board(board: List[str]):
+def draw_board(board: list[str]):
     """prints out board with moves from the passed list"""
 
-    print("-+-+-")
-    print(board[0] + "|" + board[1] + "|" + board[2])
-    print("-+-+-")
-    print(board[3] + "|" + board[4] + "|" + board[5])
-    print("-+-+-")
-    print(board[6] + "|" + board[7] + "|" + board[8])
-    print("-+-+-")
+    print("+-+-+-+")
+    print("|" + board[0] + "|" + board[1] + "|" + board[2] + "|")
+    print("+-+-+-+")
+    print("|" + board[3] + "|" + board[4] + "|" + board[5] + "|")
+    print("+-+-+-+")
+    print("|" + board[6] + "|" + board[7] + "|" + board[8] + "|")
+    print("+-+-+-+")
     print()
 
 
-def player_chooses_mark() -> Tuple[str]:
+def player_chooses_mark() -> tuple[str, str]:
     """returns letters for player and computer"""
 
     player_letter = ""
@@ -43,7 +42,7 @@ def player_chooses_mark() -> Tuple[str]:
     return (player_letter, computer_letter)
 
 
-def check_for_win(current_play: List[str]) -> Tuple[bool, str]:
+def check_for_win(current_play: list[str]) -> tuple[bool, str]:
     """checks the current play for any winner and returns tuple of
     True/False and the winner"""
 
@@ -80,7 +79,7 @@ def check_for_win(current_play: List[str]) -> Tuple[bool, str]:
         return (False, "None")
 
 
-def get_player_move(player_mark: str, current_play: List[str]) -> List[str]:
+def get_player_move(player_mark: str, current_play: list[str]) -> list[str]:
     """receives list of already made moves, asks player for new move, and returns
     a new list with the new move"""
 
@@ -99,7 +98,7 @@ def get_player_move(player_mark: str, current_play: List[str]) -> List[str]:
     return new_play
 
 
-def get_computer_move(computer_mark: str, current_play: List[str]) -> List[str]:
+def get_computer_move(computer_mark: str, current_play: list[str]) -> list[str]:
     """the computer's AI algorithm for playing"""
 
     empty_spaces = [index for index, val in enumerate(current_play) if val == " "]
