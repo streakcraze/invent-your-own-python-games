@@ -42,39 +42,6 @@ def get_scores(
     return (player_scores, opponent_scores)
 
 
-def user_plays() -> str:
-    """retrieves coordinates from user"""
-
-    coordinate = ""
-    while re.match("^[a-h][1-8]$", coordinate) is None:
-        print("Where do you want to play? ([a~h][1~8]) eg. a1, b4, g7, etc.")
-        coordinate = input()
-
-    return coordinate
-
-
-def computer_plays(ai_mark: str, board: list[list[str]]) -> str:
-    """retrieves coordinates with highest score"""
-
-    opponent_mark = "X" if ai_mark == "O" else "O"
-
-    scores = {}
-    for row in range(1, 9):
-        for column in COLUMNS:
-            coordinates = column + str(row)
-            # copy of the playing board for simulation
-            dummy_board = deepcopy(board)
-            if valid_move(ai_mark, coordinates, dummy_board):
-                scores[coordinates] = get_scores(ai_mark, opponent_mark, dummy_board)[0]
-
-    # get coordinate with max score
-    coordinate_max = max(scores, key=lambda x: scores[x], default="")
-    # play with the max score on the playing board
-    valid_move(ai_mark, coordinate_max, board)
-
-    return coordinate_max
-
-
 def check_direction(
     direction: str, coordinates: list[int], board: list[list[str]]
 ) -> tuple[list[int], str]:
@@ -194,8 +161,8 @@ def valid_move(player_mark: str, coordinates: str, board: list[list[str]]):
     return False
 
 
-def game_over(player_mark: str, board: list[list[str]]):
-    """checks if there are any valid moves for the player"""
+def get_allowed_moves(player_mark: str, board: list[list[str]]) -> list[str]:
+    allowed_moves = []
 
     for row in range(1, 9):
         for column in COLUMNS:
@@ -204,9 +171,52 @@ def game_over(player_mark: str, board: list[list[str]]):
             dummy_board = deepcopy(board)
             # board only gets changed if it's a valid move
             if valid_move(player_mark, coordinates, dummy_board):
-                return False
+                allowed_moves.append(coordinates)
 
-    return True
+    return allowed_moves
+
+
+def user_plays(player_mark: str, allowed_moves: list[str], board: list[list[str]]):
+    """retrieves coordinates from user"""
+
+    # retrieves valid coordinates from user
+    coordinates = ""
+    while True:
+        print("Where do you want to play? ([a~h][1~8]) eg. a1, b4, g7, etc.")
+        coordinates = input()
+        if re.match("^[a-h][1-8]$", coordinates) is None:
+            print(
+                "Invalid coordinate. Valid coordinates: ([a~h][1~8]) eg. a1, b4, g7, etc."
+            )
+        elif coordinates not in allowed_moves:
+            print("Invalid move. You have to flip opponent tiles.")
+        else:
+            break
+
+    # play with the chosen valid coordinates on the playing board
+    valid_move(player_mark, coordinates, board)
+
+
+def computer_plays(ai_mark: str, allowed_moves: list[str], board: list[list[str]]):
+    """retrieves coordinates with highest score"""
+
+    opponent_mark = "X" if ai_mark == "O" else "O"
+
+    scores = {}
+    for coordinates in allowed_moves:
+        # copy of the playing board for simulation
+        dummy_board = deepcopy(board)
+        # play with the valid move on the simulation board
+        valid_move(ai_mark, coordinates, dummy_board)
+        # get the score of the move and store them
+        scores[coordinates] = get_scores(ai_mark, opponent_mark, dummy_board)[0]
+
+    # get coordinate with max score
+    coordinate_max = max(scores, key=lambda x: scores[x], default="")
+    # play with the max score on the playing board
+    valid_move(ai_mark, coordinate_max, board)
+
+    print(f"Computer plays: {coordinate_max}")
 
 
 def print_results(user_score: int, computer_score: int) -> None:
@@ -248,23 +258,20 @@ if __name__ == "__main__":
         print(f"Computer: {computer_score}")
         print()
 
-        # check if there is a valid move for the user
-        if game_over(user_mark, playing_board):
-            print_results(user_score, computer_score)
-            break
-
-        user_coordinate = ""
-        while not valid_move(user_mark, user_coordinate, playing_board):
-            user_coordinate = user_plays()
-        draw_board(playing_board)
-
-        # check if there is a valid move for the computer
-        if game_over(computer_mark, playing_board):
+        allowed_user_moves = get_allowed_moves(user_mark, playing_board)
+        if allowed_user_moves:
+            user_plays(user_mark, allowed_user_moves, playing_board)
+            draw_board(playing_board)
+        else:
             print_results(user_score, computer_score)
             break
 
         print("Computer plays...", end="\r")
         time.sleep(2)
-        computer_coordinate = computer_plays(computer_mark, playing_board)
-        print(f"Computer plays: {computer_coordinate}")
-        draw_board(playing_board)
+        allowed_computer_moves = get_allowed_moves(computer_mark, playing_board)
+        if allowed_computer_moves:
+            computer_plays(computer_mark, allowed_computer_moves, playing_board)
+            draw_board(playing_board)
+        else:
+            print_results(user_score, computer_score)
+            break
