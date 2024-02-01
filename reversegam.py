@@ -162,6 +162,8 @@ def valid_move(player_mark: str, coordinates: str, board: list[list[str]]):
 
 
 def get_allowed_moves(player_mark: str, board: list[list[str]]) -> list[str]:
+    """returns list of coordinates that are allowed moves for the player"""
+
     allowed_moves = []
 
     for row in range(1, 9):
@@ -177,7 +179,7 @@ def get_allowed_moves(player_mark: str, board: list[list[str]]) -> list[str]:
 
 
 def user_plays(player_mark: str, allowed_moves: list[str], board: list[list[str]]):
-    """retrieves coordinates from user"""
+    """retrieves valid coordinates from user and plays with it"""
 
     # retrieves valid coordinates from user
     coordinates = ""
@@ -189,7 +191,9 @@ def user_plays(player_mark: str, allowed_moves: list[str], board: list[list[str]
                 "Invalid coordinate. Valid coordinates: ([a~h][1~8]) eg. a1, b4, g7, etc."
             )
         elif coordinates not in allowed_moves:
-            print("Invalid move. You have to flip opponent tiles.")
+            print(
+                "Invalid move. Valid moves are empty spaces that flip opponent tiles."
+            )
         else:
             break
 
@@ -198,7 +202,7 @@ def user_plays(player_mark: str, allowed_moves: list[str], board: list[list[str]
 
 
 def computer_plays(ai_mark: str, allowed_moves: list[str], board: list[list[str]]):
-    """retrieves coordinates with highest score"""
+    """retrieves coordinates with highest score and plays with it"""
 
     opponent_mark = "X" if ai_mark == "O" else "O"
 
