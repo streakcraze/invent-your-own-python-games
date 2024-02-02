@@ -1,0 +1,2 @@
+- Each module is a game with docstrings that explain the game's functionality and code structure.
+- "rg-sim" files are simulations of AI algorithms for reversegam.
