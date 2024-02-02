@@ -1,9 +1,4 @@
-"""Reversegam has an 8*8 board and tiles that are black on one side and white
-on the other (our game will use Os and Xs instead). Two players take turns 
-placing tiles of their chosen color—black or white—on the board. When a player 
-places a tile on the board, any of the opponent's tiles that are between 
-the new tile and the other tiles of the player's color are flipped. The goal
-of the game is to end with more tiles of your color than your opponent's color."""
+"""Runs simulation of the same algorithm once"""
 
 import time
 from copy import deepcopy
@@ -200,15 +195,13 @@ if __name__ == "__main__":
         playing_board[value[0][0]][value[0][1]] = key
         playing_board[value[1][0]][value[1][1]] = key
 
-    print("R E V E R S E G A M :")
-    print("AI SIMULATION")
+    print("R E V E R S E G A M : AI SIMULATION")
     print()
     time.sleep(2)
 
     print("LET'S BEGIN")
 
-    ai1_mark = "X"
-    ai2_mark = "O"
+    ai1_mark, ai2_mark = "X", "O"
 
     play = 1
     while True:
